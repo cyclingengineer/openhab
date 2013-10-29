@@ -41,8 +41,11 @@ public abstract class JeelinkHaBaseMessage implements JeelinkHaMessageInterface 
 
 	public byte[] rawMessage;
 	public PacketType packetType = PacketType.UNKNOWN;
+	public byte seqNbr = 0;
 	public byte id1 = 0;
 	public byte id2 = 0;
+	public byte id3 = 0;
+	public byte id4 = 0;
 	public byte status = 0;	
 
 	public JeelinkHaBaseMessage() {
@@ -68,6 +71,11 @@ public abstract class JeelinkHaBaseMessage implements JeelinkHaMessageInterface 
 		}
 		id1 = data[2];
 		id2 = data[3];
+		id3 = data[4];
+		id4 = data[5];
+		seqNbr = data[6];
+		
+		
 	}
 
 	public abstract byte[] decodeMessage();
@@ -76,13 +84,15 @@ public abstract class JeelinkHaBaseMessage implements JeelinkHaMessageInterface 
 		String str = "";
 
 		str += "Raw data = " + DatatypeConverter.printHexBinary(rawMessage);
-		str += "\n - Packet type = " + packetType;		
-
+		str += "\n - Packet type = " + packetType;
+		str += "\n - Sensor ID = " + ((id1<<16)|(id2<<8)|(id3));
+		str += "\n - Unit Code = " + id4;
+		str += "\n - Sequence Num = " + seqNbr;		
 		return str;
 	}
 	
 	public String generateDeviceId() {
-	 return id1+"."+id2;
+	 return ((id1<<16)|(id2<<8)|(id3))+"."+id4;
 	}
 
 }

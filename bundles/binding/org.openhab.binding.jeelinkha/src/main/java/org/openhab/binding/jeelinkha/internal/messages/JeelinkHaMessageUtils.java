@@ -18,27 +18,6 @@ import org.openhab.binding.jeelinkha.internal.messages.JeelinkHaBaseMessage.Pack
  */
 public class JeelinkHaMessageUtils {
 
-	/**
-	 * Command to reset JeelinkHa controller.
-	 * 
-	 */
-	public final static byte[] CMD_RESET = new byte[] { 0x0D, 0x00, 0x00, 0x00,
-			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-	/**
-	 * Command to get JeelinkHa controller status.
-	 * 
-	 */
-	public final static byte[] CMD_STATUS = new byte[] { 0x0D, 0x00, 0x00,
-			0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
-	/**
-	 * Command to save JeelinkHa controller configuration.
-	 * 
-	 */
-	public final static byte[] CMD_SAVE = new byte[] { 0x0D, 0x00, 0x00, 0x00,
-			0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-
 	public static Object decodePacket(byte[] data) throws IllegalArgumentException {
 
 		Object obj = null;

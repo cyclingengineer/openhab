@@ -69,19 +69,19 @@ public class JeelinkHaSalusRt500RfMessage extends JeelinkHaBaseMessage {
 	@Override
 	public byte[] decodeMessage() {
 
-		byte[] data = new byte[7];
+		byte[] data = new byte[8];
 
-		data[0] = 0x07;
+		data[0] = 0x08;
 		data[1] = JeelinkHaBaseMessage.PacketType.SALUSRT500RF.toByte();
-		sensorId = (data[2] & 0xFF) << 16 | (data[3] & 0xFF) << 8
-				| (data[4] & 0xFF) << 0;
+		sensorId = (data[2]&0xFF)<<16 | (data[3]&0xFF)<<8 | (data[4]&0xFF)<<0;
 		unitcode = data[5];
-		data[6] = command.toByte();		
+		data[6] = seqNbr;
+		data[7] = command.toByte();		
 		return data;
 	}
 	
 	@Override
 	public String generateDeviceId() {
-		 return "";
+		 return id1+"."+id2;
 	}
 }

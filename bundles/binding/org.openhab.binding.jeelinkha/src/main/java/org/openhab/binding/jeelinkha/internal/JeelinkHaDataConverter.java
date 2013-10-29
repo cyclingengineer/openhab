@@ -66,7 +66,7 @@ public class JeelinkHaDataConverter {
 	 * Convert JeelinkHa objects to OpenHAB state.
 	 * 
 	 * @param obj
-	 *            RFXCOM data object.
+	 *            JeelinkHa data object.
 	 * @param valueSelector
 	 *            value selector.
 	 * 
@@ -185,7 +185,7 @@ public class JeelinkHaDataConverter {
 	 */
 	public static Object convertOpenHABValueToJeelinkHaValue(String id,
 			PacketType packetType,
-			JeelinkHaValueSelector valueSelector, Type type) {
+			JeelinkHaValueSelector valueSelector, Type type, byte seqNbr) {
 
 		Object obj = null;
 
@@ -194,6 +194,7 @@ public class JeelinkHaDataConverter {
 				JeelinkHaSalusRt500RfMessage d5 = new JeelinkHaSalusRt500RfMessage();		
 				String[] ids5 = id.split("\\.");
 				d5.sensorId = Integer.parseInt(ids5[0]);
+				d5.seqNbr = seqNbr;
 				d5.unitcode = Byte.parseByte(ids5[1]);
 
 				logger.debug(

@@ -10,9 +10,9 @@
 
 -->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.openhab.binding.jeelinkha.genericbindingprovider">
-   <implementation class="org.openhab.binding.jeelinkha.internal.JeelinkHaComGenericBindingProvider"/>
+   <implementation class="org.openhab.binding.jeelinkha.internal.JeelinkHaGenericBindingProvider"/>
    <service>
       <provide interface="org.openhab.model.item.binding.BindingConfigReader"/>
-      <provide interface="org.openhab.binding.jeelinkha.JeelinkHaComBindingProvider"/>
+      <provide interface="org.openhab.binding.jeelinkha.JeelinkHaBindingProvider"/>
    </service>
 </scr:component>
