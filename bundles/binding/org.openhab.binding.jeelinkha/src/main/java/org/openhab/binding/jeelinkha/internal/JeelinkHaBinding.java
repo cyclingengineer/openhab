@@ -29,12 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * JeelinkHaComBinding listens to JeelinkHaCOM controller notifications and post values to
+ * JeelinkHaBinding listens to JeelinkHa controller notifications and post values to
  * the openHAB event bus when data is received and post item updates
- * from openHAB internal bus to JeelinkHaCOM controller.
+ * from openHAB internal bus to JeelinkHa controller.
  * 
- * @author Pauli Anttila, Evert van Es
- * @since 1.2.0
+ * @author Paul Hampson
+ * @since 1.4.0
  */
 public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> {
 
@@ -45,6 +45,7 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 	
 	private static final int timeout = 5000;
 	
+	private static byte seqNbr = 0;
 	private static JeelinkHaTransmitterMessage responseMessage = null;
 	private Object notifierObject = new Object();
 
@@ -86,7 +87,7 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 	}
 
 	/**
-	 * Find the first matching {@link JeelinkHaComBindingProvider} according to
+	 * Find the first matching {@link JeelinkHaBindingProvider} according to
 	 * <code>itemName</code> and <code>command</code>.
 	 * 
 	 * @param itemName
@@ -112,6 +113,17 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 		return firstMatchingProvider;
 	}
 
+	public static synchronized byte getSeqNumber() {
+		return seqNbr;
+	}
+
+	public synchronized byte getNextSeqNumber() {
+		if (++seqNbr == 0)
+			seqNbr = 1;
+
+		return seqNbr;
+	}
+	
 	private void executeCommand(String itemName, Type command) {
 		if (itemName != null) {
 			JeelinkHaBindingProvider provider = findFirstMatchingBindingProvider(itemName);
@@ -131,7 +143,7 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 						.getCommunicator();
 
 				if (connector == null) {
-					logger.warn("JeelinkHaCom controller is not initialized!");
+					logger.warn("JeelinkHa controller is not initialized!");
 					return;
 				}
 
@@ -142,7 +154,7 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 
 				Object obj = JeelinkHaDataConverter
 						.convertOpenHABValueToJeelinkHaValue(id, packetType,
-								valueSelector, command);
+								valueSelector, command, getNextSeqNumber());
 				byte[] data = JeelinkHaMessageUtils.encodePacket(obj);
 				logger.debug("Transmitting data: {}",
 						DatatypeConverter.printHexBinary(data));
@@ -152,7 +164,7 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 				try {
 					connector.sendMessage(data);
 				} catch (IOException e) {
-					logger.error("Message sending to JeelinkHaCOM controller failed.", e);	
+					logger.error("Message sending to JeelinkHa controller failed.", e);	
 				}
 
 				try {
@@ -170,10 +182,13 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 								resp.response);
 						break;
 
-					case FAIL:					
+					case FAIL:
+					case TOO_SHORT:
 					case UNKNOWN:
 						logger.error("Command transmit failed, '{}' received",
 								resp.response);
+						break;
+					default:
 						break;
 					}
 
@@ -214,14 +229,14 @@ public class JeelinkHaBinding extends AbstractBinding<JeelinkHaBindingProvider> 
 				if (obj instanceof JeelinkHaTransmitterMessage) {
 					JeelinkHaTransmitterMessage resp = (JeelinkHaTransmitterMessage) obj;
 
-					/*if (resp.seqNbr == getSeqNumber()) {
+					if (resp.seqNbr == getSeqNumber()) {
 						logger.debug("Transmitter response received:\n{}",
-								obj.toString()); */
+								obj.toString());
 						setResponseMessage(resp);
 						synchronized (notifierObject) {
 							notifierObject.notify();
 						}
-					//}
+					}
 
 				} else {
 					String id2 = JeelinkHaDataConverter.generateDeviceId(obj);

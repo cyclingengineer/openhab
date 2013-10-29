@@ -28,10 +28,10 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * This class establishes the connection to the RFXCOM controller.
+ * This class establishes the connection to the JeelinkHa controller.
  * 
- * @author Pauli Anttila, Evert van Es
- * @since 1.2.0
+ * @author Paul Hampson
+ * @since 1.4.0
  */
 public class JeelinkHaConnection implements ManagedService {
 
@@ -96,7 +96,7 @@ public class JeelinkHaConnection implements ManagedService {
 				connect();
 
 			} catch (Exception e) {
-				logger.error("Connection to RFXCOM controller failed.", e);
+				logger.error("Connection to JeelinkHa controller failed.", e);
 			}
 		}
 
@@ -104,20 +104,22 @@ public class JeelinkHaConnection implements ManagedService {
 
 	private void connect() throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException, InterruptedException, ConfigurationException {
 
-		logger.info("Connecting to RFXCOM [serialPort='{}' ].",
+		logger.info("Connecting to JeelinkHa [serialPort='{}' ].",
 				new Object[] { serialPort });
 
 		connector.addEventListener(eventLister);
 		connector.connect(serialPort);
 
-		logger.debug("Reset controller");
-		connector.sendMessage(JeelinkHaMessageUtils.CMD_RESET);
+		/* current stick implementation has no such command */
+		//logger.debug("Reset controller");
+		//connector.sendMessage(JeelinkHaMessageUtils.CMD_RESET);
 		
 		// controller does not response immediately after reset,
 		// so wait a while
 		Thread.sleep(1000);
-
-		if (setMode != null) {
+		
+		/* current stick implementation has no such command */
+		/*if (setMode != null) {
 			try {
 				logger.debug("Set mode: {}",
 						DatatypeConverter.printHexBinary(setMode));
@@ -128,7 +130,7 @@ public class JeelinkHaConnection implements ManagedService {
 			connector.sendMessage(setMode);
 		} else {
 			connector.sendMessage(JeelinkHaMessageUtils.CMD_STATUS);
-		}
+		} */
 	}
 	
 	private class MessageLister implements JeelinkHaEventListener {

@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Extension of the default OSGi bundle activator
  * 
- * @author Pauli Anttila
- * @since 1.2.0
+ * @author Paul Hampson
+ * @since 1.4.0
  */
 public final class JeelinkHaActivator implements BundleActivator {
 

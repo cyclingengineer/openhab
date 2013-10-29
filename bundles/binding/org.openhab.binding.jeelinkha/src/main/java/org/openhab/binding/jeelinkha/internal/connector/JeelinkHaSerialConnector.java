@@ -60,7 +60,7 @@ public class JeelinkHaSerialConnector implements JeelinkHaConnectorInterface {
 				.open(this.getClass().getName(), 2000);
 
 		serialPort = (SerialPort) commPort;
-		serialPort.setSerialPortParams(38400, SerialPort.DATABITS_8,
+		serialPort.setSerialPortParams(57600, SerialPort.DATABITS_8,
 				SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 		serialPort.enableReceiveThreshold(1);
 		serialPort.disableReceiveTimeout();
@@ -115,8 +115,8 @@ public class JeelinkHaSerialConnector implements JeelinkHaConnectorInterface {
 		out.flush();
 	}
 
-	public synchronized void addEventListener(JeelinkHaEventListener rfxComEventListener) {
-		_listeners.add(rfxComEventListener);
+	public synchronized void addEventListener(JeelinkHaEventListener jeelinkHaEventListener) {
+		_listeners.add(jeelinkHaEventListener);
 	}
 
 	public synchronized void removeEventListener(JeelinkHaEventListener listener) {
@@ -175,7 +175,7 @@ public class JeelinkHaSerialConnector implements JeelinkHaConnectorInterface {
 							start_found = true;
 							index = 0;
 							dataBuffer[index++] = tmpData[i];
-							msgLen = tmpData[i] + 1;
+							msgLen = tmpData[i];
 
 						} else if (start_found) {
 

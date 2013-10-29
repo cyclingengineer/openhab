@@ -16,29 +16,10 @@ package org.openhab.binding.jeelinkha.internal.messages;
  */
 public class JeelinkHaTransmitterMessage extends JeelinkHaBaseMessage {
 
-	public enum SubType {
-		TRANSMITTER_MESSAGE(1),
-
-		UNKNOWN(255);
-
-		private final int subType;
-
-		SubType(int subType) {
-			this.subType = subType;
-		}
-
-		SubType(byte subType) {
-			this.subType = subType;
-		}
-
-		public byte toByte() {
-			return (byte) subType;
-		}
-	}
-
 	public enum Response {
-		OK(0), // transmit OK
-		FAIL(1), // transmit Fail
+		FAIL(0), // transmit Fail
+		OK(1), // transmit OK		
+		TOO_SHORT(2), // mesg too short
 
 		UNKNOWN(255);
 
@@ -83,8 +64,8 @@ public class JeelinkHaTransmitterMessage extends JeelinkHaBaseMessage {
 	public void encodeMessage(byte[] data) {
 
 		super.encodeMessage(data);
-
-		response = Response.values()[data[2]];
+		
+		response = Response.values()[data[7]];
 
 	}
 
@@ -93,7 +74,7 @@ public class JeelinkHaTransmitterMessage extends JeelinkHaBaseMessage {
 
 		byte[] data = new byte[3];
 
-		data[0] = 0x03;
+		data[0] = 0x07;
 		data[1] = JeelinkHaBaseMessage.PacketType.TRANSMITTER_MESSAGE.toByte();		
 		data[2] = response.toByte();
 

@@ -13,13 +13,13 @@ import org.openhab.core.binding.BindingProvider;
 
 /**
  * This interface is implemented by classes that can provide mapping information
- * between openHAB items and RFXCOM items.
+ * between openHAB items and JeelinkHa items.
  * 
  * Implementing classes should register themselves as a service in order to be
  * taken into account.
  * 
- * @author Pauli Anttila
- * @since 1.2.0
+ * @author Paul Hampson
+ * @since 1.4.0
  */
 public interface JeelinkHaBindingProvider extends BindingProvider {
 
@@ -63,15 +63,5 @@ public interface JeelinkHaBindingProvider extends BindingProvider {
 	 * @return the corresponding packet type to the given <code>itemName</code>.
 	 */
 	public PacketType getPacketType(String itemName);
-
-	/**
-	 * Returns item sub type to the given <code>itemName</code>.
-	 * 
-	 * @param itemName
-	 *            the item for which to find a sub type.
-	 * 
-	 * @return the corresponding sub type to the given <code>itemName</code>.
-	 */
-	public Object getSubType(String itemName);
 
 }

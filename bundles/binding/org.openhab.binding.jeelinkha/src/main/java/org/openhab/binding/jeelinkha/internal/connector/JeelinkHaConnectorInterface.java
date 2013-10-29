@@ -11,15 +11,15 @@ package org.openhab.binding.jeelinkha.internal.connector;
 import java.io.IOException;
 
 /**
- * This interface defines interface to communicate RFXCOM controller.
+ * This interface defines interface to communicate JeelinkHa controller.
  * 
- * @author Pauli Anttila, Evert van Es
- * @since 1.2.0
+ * @author Paul Hampson
+ * @since 1.4.0
  */
 public interface JeelinkHaConnectorInterface {
 
 	/**
-	 * Procedure for connecting to RFXCOM controller.
+	 * Procedure for connecting to JeelinkHa controller.
 	 * 
 	 * @param device
 	 *            Controller connection parameters (e.g. serial port name or IP
@@ -29,7 +29,7 @@ public interface JeelinkHaConnectorInterface {
 
 
 	/**
-	 * Procedure for disconnecting to RFXCOM controller.
+	 * Procedure for disconnecting to JeelinkHa controller.
 	 * 
 	 */
 	public void disconnect();

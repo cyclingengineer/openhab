@@ -101,6 +101,9 @@ public class JeelinkHaGenericBindingProvider extends
 			//logger.debug("inbinding (<) value = " + valueSelectorString);
 
 		} else if (bindingConfig.startsWith(">")) {
+			/* example:
+			 * 	>0.0:SALUSRT500RF:Command
+			 */
 			String[] configParts = bindingConfig.trim().split(":");
 
 			config.id = configParts[0].trim().replace(">", "");
@@ -108,31 +111,14 @@ public class JeelinkHaGenericBindingProvider extends
 			
 			//logger.debug("outbinding (>) id = " + config.id);
 
-			String[] types = configParts[1].trim().split("\\.");
-
-			if (types.length != 2) {
-				throw new BindingConfigParseException(
-						"JeelinkHa out binding second field should contain 2 parts separated by '.'");
-			}
-
 			try {
-				config.packetType = JeelinkHaMessageUtils.convertPacketType(types[0]
+				config.packetType = JeelinkHaMessageUtils.convertPacketType(configParts[1]
 						.trim());
 				//logger.debug("outbinding (>) packetType = " + config.packetType);
 
 			} catch (Exception e) {
 				throw new BindingConfigParseException("Invalid packet type '"
-						+ types[0] + "'!");
-			}
-
-			try {
-				//config.subType = JeelinkHaMessageUtils.convertSubType(config.packetType,
-				//		types[1].trim());
-				//logger.debug("outbinding (>) subType = " + config.subType);
-
-			} catch (Exception e) {
-				throw new BindingConfigParseException("Invalid sub type '"
-						+ types[1] + "'!");
+						+ configParts[1] + "'!");
 			}
 
 			valueSelectorString = configParts[2].trim();
@@ -169,8 +155,7 @@ public class JeelinkHaGenericBindingProvider extends
 		String id;
 		JeelinkHaValueSelector valueSelector;
 		boolean inBinding;
-		PacketType packetType;
-		Object subType;
+		PacketType packetType;		
 
 	}
 
@@ -200,13 +185,6 @@ public class JeelinkHaGenericBindingProvider extends
 		JeelinkHaBindingConfig config = (JeelinkHaBindingConfig) bindingConfigs
 				.get(itemName);
 		return config != null ? config.packetType : null;
-	}
-
-	@Override
-	public Object getSubType(String itemName) {
-		JeelinkHaBindingConfig config = (JeelinkHaBindingConfig) bindingConfigs
-				.get(itemName);
-		return config != null ? config.subType : null;
 	}
 
 }
